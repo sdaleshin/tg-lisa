@@ -1,0 +1,12 @@
+src/
+*.test.ts
+__tests__/
+example.ts
+demo/
+tsconfig.json
+jest.config.js
+.gitignore
+*.session
+.env
+coverage/
+

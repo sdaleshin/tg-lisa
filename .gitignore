@@ -1,0 +1,14 @@
+node_modules/
+dist/
+*.log
+.env
+*.session
+*.session-journal
+.DS_Store
+coverage/
+demo/node_modules/
+demo/*.session
+demo/*.session-journal
+demo/.env
+demo/telegram-session.txt
+
