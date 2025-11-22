@@ -1,4 +1,4 @@
-export { TelegramClient } from './TelegramClient';
+export { TgLisa } from './TgLisa';
 export {
   TelegramClientConfig,
   TelegramMessage,

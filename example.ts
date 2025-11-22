@@ -1,8 +1,8 @@
-import { TelegramClient } from './src';
+import { TgLisa } from './src';
 
 async function main() {
   // Initialize client
-  const client = new TelegramClient({
+  const client = new TgLisa({
     apiId: 12345, // Replace with your API ID from https://my.telegram.org
     apiHash: 'your_api_hash', // Replace with your API hash
     sessionFilePath: './telegram-session.txt', // Session will be saved to file
@@ -28,7 +28,8 @@ async function main() {
       console.log(`\nListening to messages from: ${firstChat.title}`);
 
       client.addChatListener(firstChat.id, async (message) => {
-        console.log(`[${message.senderName}]: ${message.text}`);
+        const senderName = message.senderId?.toString() || 'Unknown';
+        console.log(`[${senderName}]: ${message.text}`);
       });
     }
 

@@ -1,6 +1,6 @@
 {
   "name": "tg-lisa",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "TypeScript Telegram client for listening to messages across all chats and channels",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

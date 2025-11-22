@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import { TelegramClient, TelegramChat } from 'tg-lisa';
+import { TgLisa, TelegramChat } from 'tg-lisa';
 
 dotenv.config();
 
@@ -17,7 +17,7 @@ async function main() {
     process.exit(1);
   }
 
-  const client = new TelegramClient({
+  const client = new TgLisa({
     apiId,
     apiHash,
     sessionFilePath: './telegram-session.txt',
@@ -52,8 +52,8 @@ async function main() {
     console.log('Press Ctrl+C to stop\n');
 
     client.addChatListener(selectedChat.id, async (message) => {
-      const timestamp = message.date.toLocaleTimeString();
-      const sender = message.senderName || 'Unknown';
+      const timestamp = new Date(message.date * 1000).toLocaleTimeString();
+      const sender = message.senderId?.toString() || 'Unknown';
       console.log(`[${timestamp}] ${sender}: ${message.text}`);
     });
 

@@ -1,3 +1,5 @@
+import { Api } from 'telegram/tl';
+
 export interface TelegramClientConfig {
   apiId: number;
   apiHash: string;
@@ -5,14 +7,7 @@ export interface TelegramClientConfig {
   sessionFilePath?: string;
 }
 
-export interface TelegramMessage {
-  id: number;
-  chatId: string;
-  text: string;
-  date: Date;
-  senderId?: string;
-  senderName?: string;
-}
+export type TelegramMessage = Api.Message;
 
 export interface TelegramChat {
   id: string;

@@ -12,7 +12,7 @@ import {
   MessageHandler,
 } from './types';
 
-export class TelegramClient {
+export class TgLisa {
   private client: GramJSClient;
   private config: TelegramClientConfig;
   private listeners: Map<string, Set<MessageHandler>> = new Map();
@@ -181,11 +181,9 @@ export class TelegramClient {
         const handlers = this.listeners.get(chatId);
         if (!handlers || handlers.size === 0) return;
 
-        const telegramMessage = await this.convertToTelegramMessage(message, chatId);
-
         for (const handler of handlers) {
           try {
-            await handler(telegramMessage);
+            await handler(message);
           } catch (error) {
             console.error('Error in message handler:', error);
           }
@@ -193,52 +191,6 @@ export class TelegramClient {
       },
       new NewMessage({})
     );
-  }
-
-  /**
-   * Convert GramJS message to TelegramMessage
-   */
-  private async convertToTelegramMessage(
-    message: Api.Message,
-    chatId: string
-  ): Promise<TelegramMessage> {
-    let senderName: string | undefined;
-    const senderId = message.senderId?.toString();
-
-    // Try to get sender info from message.sender first
-    if (message.sender) {
-      const sender = message.sender;
-      if (sender instanceof Api.User) {
-        senderName = sender.firstName || '';
-        if (sender.lastName) senderName += ` ${sender.lastName}`;
-      } else if (sender instanceof Api.Channel || sender instanceof Api.Chat) {
-        senderName = sender.title;
-      }
-    } 
-    // If sender info is not available, try to fetch it
-    else if (message.senderId) {
-      try {
-        const entity = await this.client.getEntity(message.senderId);
-        if (entity instanceof Api.User) {
-          senderName = entity.firstName || '';
-          if (entity.lastName) senderName += ` ${entity.lastName}`;
-        } else if (entity instanceof Api.Channel || entity instanceof Api.Chat) {
-          senderName = entity.title;
-        }
-      } catch (error) {
-        // If we can't fetch sender info, leave it undefined
-        console.debug('Could not fetch sender info:', error);
-      }
-    }
-
-    return {
-      id: message.id,
-      chatId,
-      text: message.text || '',
-      date: new Date(message.date * 1000),
-      senderId,
-      senderName,
-    };
   }
 
   /**
@@ -274,4 +226,5 @@ export class TelegramClient {
     }
   }
 }
+
 

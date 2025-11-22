@@ -1,4 +1,4 @@
-import { TelegramClient } from '../TelegramClient';
+import { TgLisa } from '../TgLisa';
 import { TelegramClientConfig, MessageHandler } from '../types';
 
 // Mock telegram library
@@ -119,9 +119,9 @@ jest.mock('path', () => ({
   }),
 }));
 
-describe('TelegramClient', () => {
+describe('TgLisa', () => {
   let config: TelegramClientConfig;
-  let client: TelegramClient;
+  let client: TgLisa;
 
   beforeEach(() => {
     config = {
@@ -129,7 +129,7 @@ describe('TelegramClient', () => {
       apiHash: 'test_hash',
       sessionName: 'test_session',
     };
-    client = new TelegramClient(config);
+    client = new TgLisa(config);
     jest.clearAllMocks();
   });
 
@@ -306,14 +306,7 @@ describe('TelegramClient', () => {
 
       await eventHandler({ message: mockMessage });
 
-      expect(handler).toHaveBeenCalledWith({
-        id: 1,
-        chatId: '123',
-        text: 'Hello',
-        date: expect.any(Date),
-        senderId: '456',
-        senderName: 'Jane Smith',
-      });
+      expect(handler).toHaveBeenCalledWith(mockMessage);
     });
 
     it('should not call handler for different chat', async () => {
@@ -359,7 +352,7 @@ describe('TelegramClient', () => {
         sessionFilePath: '/path/to/session.txt',
       };
 
-      new TelegramClient(configWithFile);
+      new TgLisa(configWithFile);
 
       expect(fs.existsSync).toHaveBeenCalledWith('/path/to/session.txt');
       expect(fs.readFileSync).toHaveBeenCalledWith('/path/to/session.txt', 'utf-8');
@@ -374,7 +367,7 @@ describe('TelegramClient', () => {
         sessionFilePath: '/path/to/session.txt',
       };
 
-      expect(() => new TelegramClient(configWithFile)).not.toThrow();
+      expect(() => new TgLisa(configWithFile)).not.toThrow();
     });
 
     it('should save session to file after connection', async () => {
@@ -386,7 +379,7 @@ describe('TelegramClient', () => {
         sessionFilePath: '/path/to/session.txt',
       };
 
-      const clientWithFile = new TelegramClient(configWithFile);
+      const clientWithFile = new TgLisa(configWithFile);
       await clientWithFile.connect();
 
       expect(fs.writeFileSync).toHaveBeenCalledWith(
@@ -405,7 +398,7 @@ describe('TelegramClient', () => {
         sessionFilePath: '/path/to/session.txt',
       };
 
-      const clientWithFile = new TelegramClient(configWithFile);
+      const clientWithFile = new TgLisa(configWithFile);
       await clientWithFile.connect();
 
       expect(fs.mkdirSync).toHaveBeenCalledWith('/path/to', { recursive: true });
@@ -423,7 +416,7 @@ describe('TelegramClient', () => {
         sessionFilePath: '/path/to/session.txt',
       };
 
-      new TelegramClient(configWithBoth);
+      new TgLisa(configWithBoth);
 
       // Should not read from file if sessionName is provided
       expect(fs.readFileSync).not.toHaveBeenCalled();
@@ -443,7 +436,7 @@ describe('TelegramClient', () => {
         sessionFilePath: '/path/to/session.txt',
       };
 
-      expect(() => new TelegramClient(configWithFile)).not.toThrow();
+      expect(() => new TgLisa(configWithFile)).not.toThrow();
       expect(consoleWarnSpy).toHaveBeenCalled();
 
       consoleWarnSpy.mockRestore();
@@ -463,7 +456,7 @@ describe('TelegramClient', () => {
         sessionFilePath: '/path/to/session.txt',
       };
 
-      const clientWithFile = new TelegramClient(configWithFile);
+      const clientWithFile = new TgLisa(configWithFile);
       await clientWithFile.connect();
 
       expect(consoleErrorSpy).toHaveBeenCalled();
@@ -472,4 +465,5 @@ describe('TelegramClient', () => {
     });
   });
 });
+
 
